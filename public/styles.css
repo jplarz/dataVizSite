@@ -24,6 +24,17 @@ iframe {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+.tableauPlaceholder {
+  max-width: 1200px;
+  margin: 20px auto;
+}
+
+/* Optional: page polish */
+body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f7f9fb; color:#333; text-align:center; }
+h1 { margin: 32px 0 12px; }
+a { color:#007acc; text-decoration:none; }
+a:hover { text-decoration:underline; }
+
 /* Paragraph & Links */
 p {
   margin: 20px;
