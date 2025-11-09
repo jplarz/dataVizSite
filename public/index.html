@@ -1,68 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data Visualization of National Socioeconomics and Policy Data</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Home • Dashboards</title>
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-<h1>📊 My Tableau Dashboard</h1>
+  <header class="navbar">
+    <div class="inner">
+      <div class="brand">Dashboards</div>
+      <nav class="navlinks">
+        <a href="index.html">Home</a>
+        <a href="dashboard1.html">Dashboard 1</a>
+        <a href="dashboard2.html">Dashboard 2</a>
+        <a href="dashboard3.html">Dashboard 3</a>
+      </nav>
+    </div>
+  </header>
 
-<div class="tableauPlaceholder" id="viz1">
-  <noscript>
-    <a href="#">
-      <img alt="Tableau static preview"
-           src="https://public.tableau.com/static/images/Sp/Sportswearbusiness/Dashboard1/1.png"
-           style="border:none" />
-    </a>
-  </noscript>
-  <object class="tableauViz" style="display:none;">
-    <param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F" />
-    <param name="embed_code_version" value="3" />
-    <param name="site_root" value="" />
-    <!-- IMPORTANT: this must be <workbook>/<sheet or dashboard name> -->
-    <param name="name" value="Sportswearbusiness/Dashboard1" />
-    <param name="tabs" value="yes" />
-    <param name="toolbar" value="yes" />
-    <param name="static_image" value="https://public.tableau.com/static/images/Sp/Sportswearbusiness/Dashboard1/1.png" />
-    <param name="animate_transition" value="yes" />
-    <param name="display_static_image" value="yes" />
-    <param name="display_spinner" value="yes" />
-    <param name="display_overlay" value="yes" />
-    <param name="display_count" value="yes" />
-    <param name="language" value="en-US" />
-  </object>
-</div>
+  <main class="container">
+    <section class="hero">
+      <h1>Welcome</h1>
+      <p class="sub">Choose a dashboard below. Styled in calm earth tones for focus and warmth.</p>
+    </section>
 
-<script>
-  (function() {
-    const div = document.getElementById('viz1');
-    const obj = div.getElementsByTagName('object')[0];
+    <section class="grid">
+      <a class="card" href="dashboard1.html">
+        <h3>Dashboard 1</h3>
+        <p>Your Tableau dashboard (moved here from your old <code>index.html</code>).</p>
+      </a>
+      <a class="card" href="dashboard2.html">
+        <h3>Dashboard 2</h3>
+        <p>Second dashboard page — ready for your widgets.</p>
+      </a>
+      <a class="card" href="dashboard3.html">
+        <h3>Dashboard 3</h3>
+        <p>Third dashboard page — add charts, tables, or maps.</p>
+      </a>
+    </section>
 
-    // Simple responsive sizing
-    function sizeViz() {
-      const w = div.offsetWidth;
-      if (w > 800) {
-        obj.style.width = '100%';
-        obj.style.height = Math.round(w * 0.62) + 'px';
-      } else if (w > 500) {
-        obj.style.width = '100%';
-        obj.style.height = Math.round(w * 0.75) + 'px';
-      } else {
-        obj.style.width = '100%';
-        obj.style.height = Math.round(w * 1.2) + 'px';
-      }
-    }
-    sizeViz();
-    window.addEventListener('resize', sizeViz, { passive: true });
+    <footer>© <span id="y"></span> • Earth-tone UI</footer>
+  </main>
 
-    // Load Tableau API
-    const s = document.createElement('script');
-    s.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
-    obj.parentNode.insertBefore(s, obj);
-  })();
-</script>
-
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+  <script src="app.js"></script>
 </body>
 </html>
