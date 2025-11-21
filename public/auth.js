@@ -104,12 +104,17 @@ function requireDashboardAccess(pageName) {
 
   const dashboards = Array.isArray(user.dashboards) ? user.dashboards : [];
 
-  if (!dashboards.includes(pageName)) {
+  let allowed = false;
+  for (let i = 0; i < dashboards.length; i++) {
+    if (dashboards[i] === pageName) {
+      allowed = true;
+      break;
+    }
+  }
+
+  if (!allowed) {
     alert("You do not have permission to access this dashboard.");
-
-    const fallback =
-      dashboards.length > 0 ? dashboards[0] : "login.html";
-
+    const fallback = dashboards.length > 0 ? dashboards[0] : "login.html";
     window.location.href = fallback;
   }
 }
@@ -137,12 +142,21 @@ function updateNavAuthState() {
 
   // Hide dashboard links user doesn't have access to
   const dashboardLinks = document.querySelectorAll("[data-dashboard]");
-  const dashboards = user && Array.isArray(user.dashboards) ? user.dashboards : [];
+  const dashboards =
+    user && Array.isArray(user.dashboards) ? user.dashboards : [];
 
   dashboardLinks.forEach((link) => {
     const page = link.getAttribute("data-dashboard");
 
-    if (!user || !dashboards.includes(page)) {
+    let allowed = false;
+    for (let i = 0; i < dashboards.length; i++) {
+      if (dashboards[i] === page) {
+        allowed = true;
+        break;
+      }
+    }
+
+    if (!user || !allowed) {
       link.style.display = "none";
     } else {
       link.style.display = "inline-block";
