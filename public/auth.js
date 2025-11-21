@@ -1,5 +1,3 @@
-// auth.js
-
 const MOCK_USERS = [
   {
     username: "admin",
@@ -20,6 +18,21 @@ const MOCK_USERS = [
     dashboards: ["dashboard3.html"]
   }
 ];
+
+
+// Hide dashboard links user doesn't have access to
+const user = getCurrentUser();
+const dashboardLinks = document.querySelectorAll("[data-dashboard]");
+
+dashboardLinks.forEach(link => {
+  const page = link.getAttribute("data-dashboard");
+  if (!user || !user.dashboards.includes(page)) {
+    link.style.display = "none";
+  } else {
+    link.style.display = "inline-block";
+  }
+});
+
 
 
 // Helpers to manage auth state in localStorage
