@@ -5,16 +5,16 @@
 // Mock users (demo only – NOT secure)
 const MOCK_USERS = [
   {
-    username: "admin",
-    password: "admin123",
+    username: "jparkerlee",
+    password: "1234",
     role: "admin",
-    dashboards: ["dashboard1.html", "dashboard2.html", "dashboard3.html", "dashboard4.html"]
+    dashboards: ["dashboard1.html", "dashboard2.html", "dashboard3.html"]
   },
   {
-    username: "jjparkerlee",
-    password: "123456",
+    username: "jserraty",
+    password: "1234",
     role: "user",
-    dashboards: ["dashboard2.html", "dashboard3.html"]
+    dashboards: ["dashboard1.html""]
   }
 ];
 
