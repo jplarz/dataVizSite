@@ -1,11 +1,26 @@
 // auth.js
 
-// Fake "database" of users for demo purposes only
 const MOCK_USERS = [
-  { username: "admin", password: "admin123", role: "admin" },
-  { username: "alice", password: "password", role: "user" },
-  { username: "bob", password: "password", role: "user" }
+  {
+    username: "admin",
+    password: "admin123",
+    role: "admin",
+    dashboards: ["dashboard1.html", "dashboard2.html", "dashboard3.html"]
+  },
+  {
+    username: "jjparkerlee",
+    password: "123456",
+    role: "user",
+    dashboards: ["dashboard2.html"]
+  },
+  {
+    username: "jjparkerlee",
+    password: "123456",
+    role: "user",
+    dashboards: ["dashboard3.html"]
+  }
 ];
+
 
 // Helpers to manage auth state in localStorage
 function setCurrentUser(user) {
