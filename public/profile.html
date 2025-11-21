@@ -1,26 +1,115 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Home • Earth-Tone Dash</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <meta charset="UTF-8" />
+  <title>Your Profile | Etago Dashboards</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="navbar">
-    <div class="inner">
-      <div class="brand"><span class="dot"></span> Dashboards</div>
-      <div class="spacer"></div>
-      <nav class="navlinks">
-        <a href="index.html">Home</a>
-        <a href="dashboard1.html">Dashboard 1</a>
-        <a href="dashboard2.html">Dashboard 2</a>
-        <a href="dashboard3.html">Dashboard 3</a>
-      </nav>
-      <!-- <button id="theme-toggle" class="btn" aria-label="Toggle theme">Theme</button>
-      <button id="menu-toggle" class="btn" aria-label="Toggle menu">Menu</button> -->
-    </div>
+  <!-- Shared nav -->
+  <header class="top-nav">
+    <div class="logo">Etago Dashboards</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="dashboard1.html">Dash 1</a>
+      <a href="dashboard2.html">Dash 2</a>
+      <a href="dashboard3.html">Dash 3</a>
+      <a href="dashboard4.html">Dash 4</a>
+      <a href="login.html" class="nav-logged-out">Login</a>
+      <a href="profile.html" class="nav-logged-in">Profile (<span class="nav-username"></span>)</a>
+      <a href="admin.html" class="nav-logged-in">Admin</a>
+      <button type="button" class="nav-logged-in" onclick="logout()">Logout</button>
+    </nav>
   </header>
 
+  <main class="page-container">
+    <section class="card">
+      <h1>Your Profile</h1>
+      <p class="muted">View and update your basic account details.</p>
 
+      <div id="profile-content" style="display:none;">
+        <div class="profile-row">
+          <span class="label">Username:</span>
+          <span id="profile-username"></span>
+        </div>
+        <div class="profile-row">
+          <span class="label">Role:</span>
+          <span id="profile-role" class="badge"></span>
+        </div>
 
+        <h2>Preferences (mock)</h2>
+        <form id="profile-form">
+          <label>
+            Display name
+            <input type="text" id="display-name" placeholder="How you'd like to be addressed" />
+          </label>
+
+          <label>
+            Theme
+            <select id="theme-select">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="system">Match system</option>
+            </select>
+          </label>
+
+          <button type="submit" class="btn-primary">Save changes</button>
+          <p id="profile-message" class="success-message" style="display:none;"></p>
+        </form>
+      </div>
+
+      <p id="profile-error" class="error-message" style="display:none;"></p>
+    </section>
+  </main>
+
+  <script src="auth.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Require login for this page
+      requireLogin();
+
+      const user = getCurrentUser();
+      const profileContent = document.getElementById("profile-content");
+      const profileError = document.getElementById("profile-error");
+
+      if (!user) {
+        profileError.textContent = "You must be logged in to view this page.";
+        profileError.style.display = "block";
+        return;
+      }
+
+      document.getElementById("profile-username").textContent = user.username;
+      document.getElementById("profile-role").textContent = user.role;
+
+      // Load mock preferences from localStorage
+      const prefsKey = `prefs_${user.username}`;
+      const saved = localStorage.getItem(prefsKey);
+      if (saved) {
+        const prefs = JSON.parse(saved);
+        if (prefs.displayName) {
+          document.getElementById("display-name").value = prefs.displayName;
+        }
+        if (prefs.theme) {
+          document.getElementById("theme-select").value = prefs.theme;
+        }
+      }
+
+      const form = document.getElementById("profile-form");
+      const messageEl = document.getElementById("profile-message");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const prefs = {
+          displayName: document.getElementById("display-name").value.trim(),
+          theme: document.getElementById("theme-select").value
+        };
+        localStorage.setItem(prefsKey, JSON.stringify(prefs));
+        messageEl.textContent = "Profile updated (mock only, stored locally).";
+        messageEl.style.display = "block";
+      });
+
+      profileContent.style.display = "block";
+    });
+  </script>
+</body>
+</html>

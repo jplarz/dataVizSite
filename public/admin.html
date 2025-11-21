@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin | Etago Dashboards</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Shared nav -->
+  <header class="top-nav">
+    <div class="logo">Etago Dashboards</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="dashboard1.html">Dash 1</a>
+      <a href="dashboard2.html">Dash 2</a>
+      <a href="dashboard3.html">Dash 3</a>
+      <a href="dashboard4.html">Dash 4</a>
+      <a href="login.html" class="nav-logged-out">Login</a>
+      <a href="profile.html" class="nav-logged-in">Profile (<span class="nav-username"></span>)</a>
+      <a href="admin.html" class="nav-logged-in">Admin</a>
+      <button type="button" class="nav-logged-in" onclick="logout()">Logout</button>
+    </nav>
+  </header>
+
+  <main class="page-container">
+    <section class="card">
+      <h1>Admin Console (Mock)</h1>
+      <p class="muted">
+        This page demonstrates how admin-level controls could look in a real deployment.
+        On GitHub Pages, this is purely a front-end mockup.
+      </p>
+
+      <h2>Users & Roles</h2>
+      <table class="data-table" id="user-table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Promote/Demote</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Filled by JS from MOCK_USERS -->
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>Basic Security Protocols (Conceptual)</h2>
+      <p class="muted">
+        These are the kinds of controls that would be implemented server-side in a real app:
+      </p>
+      <ul class="security-list">
+        <li><strong>Authentication:</strong> Use secure session cookies or JWTs, not <code>localStorage</code>, for real user auth.</li>
+        <li><strong>Password storage:</strong> Hash passwords with a modern algorithm (e.g., bcrypt, Argon2) and never store them in plain text.</li>
+        <li><strong>Role-based access control (RBAC):</strong> Enforce roles (user, admin, etc.) on the server for every request.</li>
+        <li><strong>Transport security:</strong> Serve the app over HTTPS only, with HSTS enabled.</li>
+        <li><strong>Input validation & sanitization:</strong> Validate user input on the server to prevent injection attacks.</li>
+        <li><strong>Audit logging:</strong> Log admin actions such as role changes and access to sensitive dashboards.</li>
+        <li><strong>Least privilege:</strong> Give users the minimum permissions needed to do their work.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="auth.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Only admins can access this page
+      requireAdmin();
+
+      const userTableBody = document.querySelector("#user-table tbody");
+
+      // For demo: clone MOCK_USERS (admin.js doesn't know about private const, so we
+      // expect MOCK_USERS to be global; if it isn't, you can mirror the data here)
+      const mockUsers = window.MOCK_USERS || [
+        { username: "admin", password: "admin123", role: "admin" },
+        { username: "alice", password: "password", role: "user" },
+        { username: "bob", password: "password", role: "user" }
+      ];
+
+      function renderTable() {
+        userTableBody.innerHTML = "";
+        mockUsers.forEach((u, index) => {
+          const tr = document.createElement("tr");
+
+          const tdUser = document.createElement("td");
+          tdUser.textContent = u.username;
+
+          const tdRole = document.createElement("td");
+          tdRole.textContent = u.role;
+          tdRole.className = u.role === "admin" ? "badge badge-admin" : "badge badge-user";
+
+          const tdAction = document.createElement("td");
+          const btn = document.createElement("button");
+          btn.textContent = u.role === "admin" ? "Demote to user (mock)" : "Promote to admin (mock)";
+          btn.className = "btn-secondary";
+          btn.addEventListener("click", () => {
+            mockUsers[index].role = u.role === "admin" ? "user" : "admin";
+            renderTable();
+          });
+
+          tdAction.appendChild(btn);
+
+          tr.appendChild(tdUser);
+          tr.appendChild(tdRole);
+          tr.appendChild(tdAction);
+
+          userTableBody.appendChild(tr);
+        });
+      }
+
+      renderTable();
+    });
+  </script>
+</body>
+</html>

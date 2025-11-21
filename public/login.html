@@ -2,7 +2,69 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard 1 • Tableau</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Login | Etago Dashboards</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
+<body>
+  <!-- Shared nav -->
+  <header class="top-nav">
+    <div class="logo">Etago Dashboards</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="dashboard1.html">Dash 1</a>
+      <a href="dashboard2.html">Dash 2</a>
+      <a href="dashboard3.html">Dash 3</a>
+      <a href="dashboard4.html">Dash 4</a>
+      <a href="login.html" class="nav-logged-out">Login</a>
+      <a href="profile.html" class="nav-logged-in">Profile (<span class="nav-username"></span>)</a>
+      <a href="admin.html" class="nav-logged-in">Admin</a>
+      <button type="button" class="nav-logged-in" onclick="logout()">Logout</button>
+    </nav>
+  </header>
+
+  <main class="auth-container">
+    <section class="card auth-card">
+      <h1>Sign in to your dashboard</h1>
+      <p class="muted">Demo-only login. Try <code>admin / admin123</code> or <code>alice / password</code>.</p>
+
+      <form id="login-form">
+        <label>
+          Username
+          <input type="text" id="username" required />
+        </label>
+
+        <label>
+          Password
+          <input type="password" id="password" required />
+        </label>
+
+        <button type="submit" class="btn-primary">Login</button>
+        <p id="login-error" class="error-message" style="display:none;"></p>
+      </form>
+    </section>
+  </main>
+
+  <script src="auth.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("login-form");
+      const errorEl = document.getElementById("login-error");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
+
+        const result = login(username, password);
+        if (!result.success) {
+          errorEl.textContent = result.message;
+          errorEl.style.display = "block";
+        } else {
+          // Redirect to main dashboard after login
+          window.location.href = "dashboard1.html";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

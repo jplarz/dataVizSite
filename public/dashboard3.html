@@ -1,10 +1,10 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Dashboard 3</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard 1 • Tableau</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="navbar">
@@ -16,6 +16,14 @@
         <a href="dashboard1.html">Dashboard 1</a>
         <a href="dashboard2.html">Dashboard 2</a>
         <a href="dashboard3.html">Dashboard 3</a>
+
+        <!-- Auth-aware links -->
+        <a href="login.html" class="nav-logged-out">Login</a>
+        <a href="profile.html" class="nav-logged-in">
+          Profile (<span class="nav-username"></span>)
+        </a>
+        <a href="admin.html" class="nav-logged-in">Admin</a>
+        <button type="button" class="nav-logged-in" onclick="logout()">Logout</button>
       </nav>
     </div>
   </header>
@@ -53,6 +61,12 @@
       </div>
     </section>
   </main>
+ 
+  <script src="auth.js"></script>
+  <script>
+    // Redirect to login if not authenticated
+    requireLogin();
+  </script>
 
   <script>
     (function() {
