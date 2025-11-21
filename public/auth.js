@@ -1,3 +1,4 @@
+// ===== Mock users (demo only) =====
 const MOCK_USERS = [
   {
     username: "admin",
@@ -9,33 +10,12 @@ const MOCK_USERS = [
     username: "jjparkerlee",
     password: "123456",
     role: "user",
-    dashboards: ["dashboard2.html"]
-  },
-  {
-    username: "jjparkerlee",
-    password: "123456",
-    role: "user",
-    dashboards: ["dashboard3.html"]
+    dashboards: ["dashboard2.html", "dashboard3.html"]
   }
 ];
 
 
-// Hide dashboard links user doesn't have access to
-const user = getCurrentUser();
-const dashboardLinks = document.querySelectorAll("[data-dashboard]");
-
-dashboardLinks.forEach(link => {
-  const page = link.getAttribute("data-dashboard");
-  if (!user || !user.dashboards.includes(page)) {
-    link.style.display = "none";
-  } else {
-    link.style.display = "inline-block";
-  }
-});
-
-
-
-// Helpers to manage auth state in localStorage
+// ===== Helpers to manage auth state in localStorage =====
 function setCurrentUser(user) {
   localStorage.setItem("currentUser", JSON.stringify(user));
 }
@@ -49,7 +29,8 @@ function clearCurrentUser() {
   localStorage.removeItem("currentUser");
 }
 
-// Called on login form submit
+
+// ===== Core auth functions =====
 function login(username, password) {
   const user = MOCK_USERS.find(
     (u) => u.username === username && u.password === password
@@ -57,17 +38,24 @@ function login(username, password) {
   if (!user) {
     return { success: false, message: "Invalid username or password." };
   }
-  setCurrentUser({ username: user.username, role: user.role });
+
+  // Store full user (without password)
+  setCurrentUser({
+    username: user.username,
+    role: user.role,
+    dashboards: user.dashboards || []
+  });
+
   return { success: true };
 }
 
-// For logout button
 function logout() {
   clearCurrentUser();
   window.location.href = "login.html";
 }
 
-// Guard functions to use on pages
+
+// ===== Guards =====
 function requireLogin() {
   const user = getCurrentUser();
   if (!user) {
@@ -82,9 +70,28 @@ function requireAdmin() {
   }
 }
 
-// Utility to update nav UI based on login state
+function requireDashboardAccess(pageName) {
+  const user = getCurrentUser();
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  if (!Array.isArray(user.dashboards) || !user.dashboards.includes(pageName)) {
+    alert("You do not have permission to access this dashboard.");
+    const fallback =
+      Array.isArray(user.dashboards) && user.dashboards.length
+        ? user.dashboards[0]
+        : "login.html";
+    window.location.href = fallback;
+  }
+}
+
+
+// ===== Nav / UI wiring =====
 function updateNavAuthState() {
   const user = getCurrentUser();
+
   const loggedOutLinks = document.querySelectorAll(".nav-logged-out");
   const loggedInLinks = document.querySelectorAll(".nav-logged-in");
   const usernameSpans = document.querySelectorAll(".nav-username");
@@ -98,21 +105,19 @@ function updateNavAuthState() {
     loggedInLinks.forEach((el) => (el.style.display = "none"));
     usernameSpans.forEach((el) => (el.textContent = ""));
   }
+
+  // Hide dashboard links user doesn't have access to
+  const dashboardLinks = document.querySelectorAll("[data-dashboard]");
+  dashboardLinks.forEach((link) => {
+    const page = link.getAttribute("data-dashboard");
+
+    if (!user || !Array.isArray(user.dashboards) || !user.dashboards.includes(page)) {
+      link.style.display = "none";
+    } else {
+      link.style.display = "inline-block";
+    }
+  });
 }
 
-function requireDashboardAccess(pageName) {
-  const user = getCurrentUser();
-  if (!user) {
-    window.location.href = "login.html";
-    return;
-  }
-  if (!user.dashboards.includes(pageName)) {
-    // optional feedback
-    alert("You do not have permission to access this dashboard.");
-    window.location.href = user.dashboards[0]; // send to their allowed dashboard
-  }
-}
-
-
-// Call this after DOM loads on each page that has the nav
+// Run once DOM is ready on each page that includes the nav
 document.addEventListener("DOMContentLoaded", updateNavAuthState);
