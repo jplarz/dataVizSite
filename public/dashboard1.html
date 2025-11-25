@@ -6,24 +6,13 @@
   <title>Business Analytics</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    /* Optional: responsive iframe helper if not already in styles.css */
     .embed-card {
       position: relative;
     }
-    .iframe-wrapper {
-      position: relative;
+    .tableauPlaceholder {
       width: 100%;
-      /* 16:9 ratio; tweak as needed */
-      padding-top: 62.5%;
-      overflow: hidden;
-      border-radius: 0.75rem;
-    }
-    .iframe-wrapper iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     .loading {
       margin-bottom: 0.75rem;
@@ -74,22 +63,66 @@
     <section class="card embed-card">
       <div class="loading" id="viz-loading">Loading dashboard…</div>
 
-      <div class="iframe-wrapper">
-        <!-- 🔴 IMPORTANT: replace the src URL with your Tableau view URL -->
-        <iframe
-          id="tableau-iframe"
-          src="https://public.tableau.com/app/profile/johnny.parker.lee/viz/superstoredashboard_17640488220630/StoreDashboard#1"
-          allowfullscreen
-        ></iframe>
+      <!-- 🔽 Your Tableau embed, unchanged except for formatting -->
+      <div class='tableauPlaceholder' id='viz1764049068816' style='position: relative'>
+        <noscript>
+          <a href='#'>
+            <img
+              alt='Store Dashboard'
+              src='https://public.tableau.com/static/images/su/superstoredashboard_17640488220630/StoreDashboard/1_rss.png'
+              style='border: none'
+            />
+          </a>
+        </noscript>
+        <object class='tableauViz' style='display:none;'>
+          <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+          <param name='embed_code_version' value='3' />
+          <param name='site_root' value='' />
+          <param name='name' value='superstoredashboard_17640488220630/StoreDashboard' />
+          <param name='tabs' value='no' />
+          <param name='toolbar' value='yes' />
+          <param name='static_image' value='https://public.tableau.com/static/images/su/superstoredashboard_17640488220630/StoreDashboard/1.png' />
+          <param name='animate_transition' value='yes' />
+          <param name='display_static_image' value='yes' />
+          <param name='display_spinner' value='yes' />
+          <param name='display_overlay' value='yes' />
+          <param name='display_count' value='yes' />
+          <param name='language' value='en-US' />
+        </object>
       </div>
+
+      <script type='text/javascript'>
+        var divElement = document.getElementById('viz1764049068816');
+        var vizElement = divElement.getElementsByTagName('object')[0];
+
+        if (divElement.offsetWidth > 800) {
+          vizElement.style.width = '1000px';
+          vizElement.style.height = '827px';
+        } else if (divElement.offsetWidth > 500) {
+          vizElement.style.width = '1000px';
+          vizElement.style.height = '827px';
+        } else {
+          vizElement.style.width = '100%';
+          vizElement.style.height = '1527px';
+        }
+
+        var scriptElement = document.createElement('script');
+        scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+        scriptElement.onload = function () {
+          var loading = document.getElementById('viz-loading');
+          if (loading) loading.style.display = 'none';
+        };
+        vizElement.parentNode.insertBefore(scriptElement, vizElement);
+      </script>
+      <!-- 🔼 End Tableau embed -->
     </section>
   </main>
 
-  <!-- Auth + theme scripts -->
+  <!-- Auth + theme scripts at the bottom so they don't block Tableau -->
   <script src="auth.js"></script>
   <script src="theme.js"></script>
   <script>
-    // Call auth guards safely so they never break the page
+    // Guard these so they can’t break the page if missing
     try {
       if (typeof requireLogin === "function") {
         requireLogin();
@@ -99,16 +132,6 @@
       }
     } catch (e) {
       console.warn("Auth not initialized:", e);
-    }
-
-    // Hide loading once iframe finishes
-    const iframe = document.getElementById("tableau-iframe");
-    const loading = document.getElementById("viz-loading");
-
-    if (iframe) {
-      iframe.addEventListener("load", () => {
-        if (loading) loading.style.display = "none";
-      });
     }
   </script>
 </body>
