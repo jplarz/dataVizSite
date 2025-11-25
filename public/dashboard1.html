@@ -8,11 +8,13 @@
   <style>
     .embed-card {
       position: relative;
+      overflow: visible;
+      margin: 0 auto;
+      max-width: 1400px;
     }
     .tableauPlaceholder {
       width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
+      position: relative;
     }
     .loading {
       margin-bottom: 0.75rem;
@@ -63,17 +65,14 @@
     <section class="card embed-card">
       <div class="loading" id="viz-loading">Loading dashboard…</div>
 
-      <!-- 🔽 Your Tableau embed, unchanged except for formatting -->
-      <div class='tableauPlaceholder' id='viz1764049068816' style='position: relative'>
+      <!-- Tableau Embed -->
+      <div class='tableauPlaceholder' id='viz1764049068816'>
         <noscript>
-          <a href='#'>
-            <img
-              alt='Store Dashboard'
-              src='https://public.tableau.com/static/images/su/superstoredashboard_17640488220630/StoreDashboard/1_rss.png'
-              style='border: none'
-            />
-          </a>
+          <a href="#"><img alt='Store Dashboard'
+            src='https://public.tableau.com/static/images/su/superstoredashboard_17640488220630/StoreDashboard/1_rss.png'
+            style='border:none'></a>
         </noscript>
+
         <object class='tableauViz' style='display:none;'>
           <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
           <param name='embed_code_version' value='3' />
@@ -81,7 +80,8 @@
           <param name='name' value='superstoredashboard_17640488220630/StoreDashboard' />
           <param name='tabs' value='no' />
           <param name='toolbar' value='yes' />
-          <param name='static_image' value='https://public.tableau.com/static/images/su/superstoredashboard_17640488220630/StoreDashboard/1.png' />
+          <param name='static_image'
+            value='https://public.tableau.com/static/images/su/superstoredashboard_17640488220630/StoreDashboard/1.png' />
           <param name='animate_transition' value='yes' />
           <param name='display_static_image' value='yes' />
           <param name='display_spinner' value='yes' />
@@ -95,41 +95,46 @@
         var divElement = document.getElementById('viz1764049068816');
         var vizElement = divElement.getElementsByTagName('object')[0];
 
-        if (divElement.offsetWidth > 800) {
-          vizElement.style.width = '1000px';
-          vizElement.style.height = '827px';
-        } else if (divElement.offsetWidth > 500) {
-          vizElement.style.width = '1000px';
-          vizElement.style.height = '827px';
-        } else {
-          vizElement.style.width = '100%';
-          vizElement.style.height = '1527px';
+        function sizeViz() {
+          var w = divElement.offsetWidth || window.innerWidth;
+
+          // Always 100% width — adjust height for full dashboard visibility
+          if (w > 1000) {
+            vizElement.style.width = '100%';
+            vizElement.style.height = Math.round(w * 0.60) + 'px';
+          } else if (w > 600) {
+            vizElement.style.width = '100%';
+            vizElement.style.height = Math.round(w * 0.80) + 'px';
+          } else {
+            vizElement.style.width = '100%';
+            vizElement.style.height = Math.round(w * 1.10) + 'px';
+          }
         }
+
+        sizeViz(); // initial sizing
 
         var scriptElement = document.createElement('script');
         scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
         scriptElement.onload = function () {
+          sizeViz(); // resize once Tableau loads
           var loading = document.getElementById('viz-loading');
           if (loading) loading.style.display = 'none';
         };
         vizElement.parentNode.insertBefore(scriptElement, vizElement);
+
+        window.addEventListener('resize', sizeViz, { passive: true });
       </script>
-      <!-- 🔼 End Tableau embed -->
+      <!-- End Tableau Embed -->
     </section>
   </main>
 
-  <!-- Auth + theme scripts at the bottom so they don't block Tableau -->
+  <!-- Auth and Theme -->
   <script src="auth.js"></script>
   <script src="theme.js"></script>
   <script>
-    // Guard these so they can’t break the page if missing
     try {
-      if (typeof requireLogin === "function") {
-        requireLogin();
-      }
-      if (typeof requireDashboardAccess === "function") {
-        requireDashboardAccess("dashboard1.html");
-      }
+      if (typeof requireLogin === "function") requireLogin();
+      if (typeof requireDashboardAccess === "function") requireDashboardAccess("dashboard1.html");
     } catch (e) {
       console.warn("Auth not initialized:", e);
     }
